@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oral Biofilm AI — Dental Plaque Risk Assessment</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
+</head>
+<body>
+
+  <!-- Background grid -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-orb orb-1" aria-hidden="true"></div>
+  <div class="bg-orb orb-2" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-icon" aria-hidden="true">
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="18" r="17" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M10 22c0-2 1.5-3.5 3-5 1-1 1.5-2 1.5-3.5a3.5 3.5 0 017 0c0 1.5.5 2.5 1.5 3.5 1.5 1.5 3 3 3 5a4 4 0 01-4 4H14a4 4 0 01-4-4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M15 18h6M18 15v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="logo-text">Oral Biofilm <em>AI</em></span>
+      </div>
+      <nav class="header-badge">
+        <span class="pulse-dot" aria-hidden="true"></span>
+        Clinical Preview
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-label">AI-Powered Dental Analysis</div>
+      <h1 class="hero-title">
+        Detect plaque risk<br/>
+        <em>before it becomes a problem.</em>
+      </h1>
+      <p class="hero-sub">
+        Upload a photo taken after applying disclosing gel. Our AI model instantly assesses your caries and biofilm risk level.
+      </p>
+      <div class="hero-steps">
+        <div class="step"><span>01</span> Upload photo</div>
+        <div class="step-div" aria-hidden="true"></div>
+        <div class="step"><span>02</span> AI analyzes</div>
+        <div class="step-div" aria-hidden="true"></div>
+        <div class="step"><span>03</span> Get results</div>
+      </div>
+    </section>
+
+    <!-- Upload Card -->
+    <section class="card upload-card" id="uploadSection">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <polyline points="17 8 12 3 7 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="12" y1="3" x2="12" y2="15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <h2 class="card-title">Upload Image</h2>
+          <p class="card-subtitle">Drag & drop or tap to select</p>
+        </div>
+      </div>
+
+      <div class="drop-zone" id="dropZone" role="button" tabindex="0" aria-label="Upload dental image">
+        <div class="drop-zone-inner" id="dropContent">
+          <div class="drop-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="8" y="12" width="48" height="40" rx="4" stroke="currentColor" stroke-width="2"/>
+              <circle cx="22" cy="26" r="5" stroke="currentColor" stroke-width="2"/>
+              <path d="M8 42l14-10 8 8 8-12 18 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <p class="drop-label">Drop your dental photo here</p>
+          <p class="drop-sub">PNG, JPG or WEBP · max 10MB</p>
+          <label class="upload-btn" for="fileInput">
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M10 3v10M5 8l5-5 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3 17h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Choose File
+          </label>
+          <input type="file" id="fileInput" accept="image/*" capture="environment" hidden aria-hidden="true" />
+        </div>
+
+        <!-- Preview -->
+        <div class="preview-wrap hidden" id="previewWrap">
+          <img id="previewImg" src="" alt="Uploaded dental image preview" class="preview-img" />
+          <button class="remove-btn" id="removeBtn" aria-label="Remove image">
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="5" y1="5" x2="15" y2="15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="15" y1="5" x2="5" y2="15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <button class="analyze-btn" id="analyzeBtn" disabled>
+        <span class="btn-text">Analyze Image</span>
+        <span class="btn-spinner hidden" id="btnSpinner" aria-hidden="true"></span>
+        <svg class="btn-arrow" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <!-- Model status -->
+      <div class="model-status" id="modelStatus">
+        <span class="status-dot loading" id="statusDot" aria-hidden="true"></span>
+        <span id="statusText">Loading AI model…</span>
+      </div>
+    </section>
+
+    <!-- Results Section (hidden until analysis) -->
+    <section class="results-section hidden" id="resultsSection" aria-live="polite">
+
+      <!-- Risk Dashboard -->
+      <div class="card result-card" id="resultCard">
+        <div class="result-header">
+          <div class="result-icon" id="resultIcon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div>
+            <p class="result-label">Risk Assessment</p>
+            <h2 class="result-level" id="resultLevel">—</h2>
+          </div>
+          <div class="risk-badge" id="riskBadge">—</div>
+        </div>
+
+        <!-- Confidence bars -->
+        <div class="confidence-section">
+          <h3 class="section-title">Prediction Confidence</h3>
+          <div class="confidence-bars" id="confidenceBars">
+            <!-- Injected by JS -->
+          </div>
+        </div>
+
+        <!-- Gauge -->
+        <div class="gauge-wrap">
+          <svg class="gauge-svg" viewBox="0 0 200 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#22c55e"/>
+                <stop offset="50%" style="stop-color:#f59e0b"/>
+                <stop offset="100%" style="stop-color:#ef4444"/>
+              </linearGradient>
+            </defs>
+            <path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="#e2e8f0" stroke-width="14" stroke-linecap="round"/>
+            <path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="url(#gaugeGrad)" stroke-width="14" stroke-linecap="round"/>
+            <line id="gaugeNeedle" x1="100" y1="100" x2="100" y2="30" stroke="#1e293b" stroke-width="3" stroke-linecap="round" transform="rotate(0 100 100)"/>
+            <circle cx="100" cy="100" r="6" fill="#1e293b"/>
+            <text x="20" y="115" fill="#64748b" font-size="10" font-family="DM Sans">Low</text>
+            <text x="84" y="18" fill="#64748b" font-size="10" font-family="DM Sans">Medium</text>
+            <text x="158" y="115" fill="#64748b" font-size="10" font-family="DM Sans">High</text>
+          </svg>
+          <div class="gauge-pct" id="gaugePct">—</div>
+        </div>
+      </div>
+
+      <!-- Recommendation Card -->
+      <div class="card rec-card" id="recCard">
+        <div class="rec-icon" id="recIcon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="rec-body">
+          <h3 class="rec-title">Clinical Recommendation</h3>
+          <p class="rec-text" id="recText">—</p>
+          <ul class="rec-tips" id="recTips">
+            <!-- injected by JS -->
+          </ul>
+        </div>
+      </div>
+
+      <!-- Restart button -->
+      <button class="restart-btn" id="restartBtn">
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M3 10a7 7 0 1014 0 7 7 0 00-14 0z" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M10 7v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M3.5 5L3 3l-2 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Analyze Another Image
+      </button>
+
+    </section>
+
+    <!-- Disclaimer -->
+    <footer class="disclaimer">
+      <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M10 9v5M10 7v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <p>This tool is for educational screening purposes only and does not replace professional dental diagnosis. Always consult a licensed dentist for clinical decisions.</p>
+    </footer>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
