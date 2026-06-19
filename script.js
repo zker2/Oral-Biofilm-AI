@@ -11,9 +11,9 @@ const TRANSLATIONS = {
   en: {
     clinicalPreview: "Clinical Preview",
 
-    heroLabel: "AI-Powered Dental Analysis",
-    heroTitle1: "Detect plaque risk",
-    heroTitle2: "before it becomes a problem.",
+    heroLabel: "AI-Based Dental Caries Risk Screening",
+    heroTitle1: "Dental Caries Risk Screening",
+    heroTitle2: "using Dental Plaque Analysis.",
     heroSub:
       "Upload a photo taken after applying disclosing gel. Our AI model instantly assesses your caries and biofilm risk level.",
 
@@ -53,9 +53,9 @@ const TRANSLATIONS = {
   th: {
     clinicalPreview: "เวอร์ชันทดลองทางคลินิก",
 
-    heroLabel: "การวิเคราะห์สุขภาพช่องปากด้วย AI",
-    heroTitle1: "ตรวจความเสี่ยงคราบจุลินทรีย์",
-    heroTitle2: "ก่อนที่จะกลายเป็นปัญหา",
+    heroLabel: "ระบบคัดกรองความเสี่ยงฟันผุด้วยปัญญาประดิษฐ์",
+    heroTitle1: "ระบบคัดกรองความเสี่ยงฟันผุ",
+    heroTitle2: "จากการวิเคราะห์คราบจุลินทรีย์ด้วยปัญญาประดิษฐ์",
 
     heroSub:
       "อัปโหลดภาพหลังใช้สารย้อมคราบจุลินทรีย์ ระบบ AI จะประเมินความเสี่ยงของฟันผุและคราบจุลินทรีย์โดยอัตโนมัติ",
@@ -284,10 +284,24 @@ dropZone.addEventListener('drop', (e) => {
   if (file) handleFile(file);
 });
 
+// "Choose File" button — explicit handler for Safari iOS
+const chooseFileBtn = document.getElementById('chooseFileBtn');
+if (chooseFileBtn) {
+  chooseFileBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); // prevent dropZone click from also firing
+    fileInput.click();
+  });
+}
+
 // Click to open file picker (anywhere on drop zone)
+// Safari iOS: label click already triggers fileInput, so we only call fileInput.click()
+// when the click did NOT originate from the label element (to avoid double-trigger)
 dropZone.addEventListener('click', (e) => {
   if (e.target === removeBtn || removeBtn.contains(e.target)) return;
-  if (!previewWrap.classList.contains('hidden')) return; // image already shown
+  if (!previewWrap.classList.contains('hidden')) return;// already has a file, don't open picker again
+  // If click came from the label or its children, the browser already handles it
+  const label = dropZone.querySelector('label[for="fileInput"]');
+  if (label && (e.target === label || label.contains(e.target))) return;
   fileInput.click();
 });
 
