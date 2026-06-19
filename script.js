@@ -97,8 +97,8 @@ async function loadModel() {
     if (uploadedFile) analyzeBtn.disabled = false;
   } catch (err) {
     console.warn('Model load failed:', err);
-    setStatus('error', 'Model not found — demo mode active');
-    model = null; // will use mock predictions
+    setStatus('error', 'AI model failed to load');
+    model = null;
     if (uploadedFile) analyzeBtn.disabled = false;
   }
 }
@@ -187,21 +187,27 @@ function resetUpload() {
 // ── Analysis ───────────────────────────────────
 analyzeBtn.addEventListener('click', async () => {
   if (isAnalyzing || !uploadedFile) return;
+
+  if (!model) {
+    alert('AI Model not loaded. Please refresh the page.');
+    return;
+  }
+
   isAnalyzing = true;
   startLoading();
 
   try {
-    let predictions;
-    if (model) {
-      predictions = await model.predict(previewImg);
-    } else {
-      predictions = await mockPredict();
-    }
+    const predictions = await model.predict(previewImg);
+
+    console.log('Predictions:', predictions);
+
     showResults(predictions);
+
   } catch (err) {
     console.error('Prediction error:', err);
-    const predictions = await mockPredict();
-    showResults(predictions);
+
+    alert('Unable to analyze image. Please try again.');
+
   } finally {
     isAnalyzing = false;
     stopLoading();
@@ -220,18 +226,6 @@ function stopLoading() {
   analyzeBtn.querySelector('.btn-arrow').classList.remove('hidden');
   btnSpinner.classList.add('hidden');
   analyzeBtn.disabled = false;
-}
-
-// Mock predictions for demo (when no model is present)
-async function mockPredict() {
-  await new Promise(r => setTimeout(r, 1800)); // simulate inference time
-  const labels = ['Low Risk', 'Medium Risk', 'High Risk'];
-  const raw = [Math.random(), Math.random(), Math.random()];
-  const sum = raw.reduce((a, b) => a + b, 0);
-  return labels.map((className, i) => ({
-    className,
-    probability: raw[i] / sum,
-  }));
 }
 
 // ── Results Rendering ──────────────────────────
