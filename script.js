@@ -5,46 +5,173 @@
 
 'use strict';
 
+let currentLang = "en";
+
+const TRANSLATIONS = {
+  en: {
+    clinicalPreview: "Clinical Preview",
+
+    heroLabel: "AI-Powered Dental Analysis",
+    heroTitle1: "Detect plaque risk",
+    heroTitle2: "before it becomes a problem.",
+    heroSub:
+      "Upload a photo taken after applying disclosing gel. Our AI model instantly assesses your caries and biofilm risk level.",
+
+    step1: "Upload photo",
+    step2: "AI analyzes",
+    step3: "Get results",
+
+    uploadTitle: "Upload Image",
+    uploadSub: "Drag & drop or tap to select",
+
+    dropLabel: "Drop your dental photo here",
+    dropSub: "PNG, JPG or WEBP · max 10MB",
+    chooseFile: "Choose File",
+
+    analyzeBtn: "Analyze Image",
+    analyzing: "Analyzing...",
+
+    riskAssessment: "Risk Assessment",
+    confidence: "Prediction Confidence",
+
+    recommendation: "Clinical Recommendation",
+
+    another: "Analyze Another Image",
+
+    low: "Low Risk",
+    medium: "Medium Risk",
+    high: "High Risk",
+
+    lowLabel: "Low",
+    mediumLabel: "Medium",
+    highLabel: "High",
+
+    disclaimer:
+      "This tool is for educational screening purposes only and does not replace professional dental diagnosis. Always consult a licensed dentist for clinical decisions."
+  },
+
+  th: {
+    clinicalPreview: "เวอร์ชันทดลองทางคลินิก",
+
+    heroLabel: "การวิเคราะห์สุขภาพช่องปากด้วย AI",
+    heroTitle1: "ตรวจความเสี่ยงคราบจุลินทรีย์",
+    heroTitle2: "ก่อนที่จะกลายเป็นปัญหา",
+
+    heroSub:
+      "อัปโหลดภาพหลังใช้สารย้อมคราบจุลินทรีย์ ระบบ AI จะประเมินความเสี่ยงของฟันผุและคราบจุลินทรีย์โดยอัตโนมัติ",
+
+    step1: "อัปโหลดรูป",
+    step2: "AI วิเคราะห์",
+    step3: "ดูผลลัพธ์",
+
+    uploadTitle: "อัปโหลดรูปภาพ",
+    uploadSub: "ลากวางหรือกดเพื่อเลือกรูป",
+
+    dropLabel: "วางรูปภาพช่องปากที่นี่",
+    dropSub: "PNG, JPG หรือ WEBP · สูงสุด 10MB",
+    chooseFile: "เลือกรูปภาพ",
+
+    analyzeBtn: "วิเคราะห์รูปภาพ",
+    analyzing: "กำลังวิเคราะห์...",
+
+    riskAssessment: "ผลการประเมินความเสี่ยง",
+    confidence: "ความมั่นใจของการทำนาย",
+
+    recommendation: "คำแนะนำทางทันตกรรม",
+
+    another: "วิเคราะห์รูปใหม่",
+
+    low: "ความเสี่ยงต่ำ",
+    medium: "ความเสี่ยงปานกลาง",
+    high: "ความเสี่ยงสูง",
+
+    lowLabel: "ต่ำ",
+    mediumLabel: "ปานกลาง",
+    highLabel: "สูง",
+
+    disclaimer:
+      "เครื่องมือนี้ใช้เพื่อการคัดกรองเบื้องต้นเท่านั้น ไม่สามารถใช้แทนการวินิจฉัยโดยทันตแพทย์ได้"
+  }
+};
+
 // ── Configuration ─────────────────────────────
 const MODEL_PATH = './model/'; // folder containing model.json & metadata.json
 
 const RISK_CONFIG = {
   'Low Risk': {
     key: 'low',
-    gaugeAngle: -80,         // needle angle (from centre top, negative = left)
-    recommendation: 'Your plaque levels appear well-controlled. Keep up the great work!',
-    tips: [
-      'Continue brushing for at least 2 minutes, twice daily.',
-      'Floss or use interdental brushes once a day.',
-      'Schedule a routine dental check-up every 6 months.',
-      'Maintain a low-sugar, balanced diet.',
-    ],
+    gaugeAngle: -80,
+    recommendation: {
+      en: 'Your plaque levels appear well-controlled. Keep up the great work!',
+      th: 'ระดับคราบจุลินทรีย์อยู่ในเกณฑ์ดี ดูแลสุขภาพช่องปากได้อย่างเหมาะสม'
+    },
+    tips: {
+      en: [
+        'Continue brushing for at least 2 minutes, twice daily.',
+        'Floss or use interdental brushes once a day.',
+        'Schedule a routine dental check-up every 6 months.',
+        'Maintain a low-sugar, balanced diet.'
+      ],
+      th: [
+        'แปรงฟันอย่างน้อยวันละ 2 ครั้ง ครั้งละ 2 นาที',
+        'ใช้ไหมขัดฟันหรือแปรงซอกฟันทุกวัน',
+        'ตรวจสุขภาพช่องปากทุก 6 เดือน',
+        'หลีกเลี่ยงอาหารและเครื่องดื่มที่มีน้ำตาลสูง'
+      ]
+    }
   },
+
   'Medium Risk': {
     key: 'medium',
     gaugeAngle: 0,
-    recommendation: 'Moderate plaque activity detected. Some areas may need extra attention.',
-    tips: [
-      'Review and improve your brushing technique — use a timer.',
-      'Add interdental cleaning (floss, water flosser) to your daily routine.',
-      'Reduce frequency of sugary snacks and drinks.',
-      'Consider a fluoride mouthwash for added protection.',
-      'Schedule a professional cleaning within 3 months.',
-    ],
+    recommendation: {
+      en: 'Moderate plaque activity detected. Some areas may need extra attention.',
+      th: 'พบคราบจุลินทรีย์ในระดับปานกลาง ควรดูแลทำความสะอาดบางบริเวณเพิ่มเติม'
+    },
+    tips: {
+      en: [
+        'Review and improve your brushing technique — use a timer.',
+        'Add interdental cleaning (floss, water flosser) to your daily routine.',
+        'Reduce frequency of sugary snacks and drinks.',
+        'Consider a fluoride mouthwash for added protection.',
+        'Schedule a professional cleaning within 3 months.'
+      ],
+      th: [
+        'ปรับปรุงเทคนิคการแปรงฟันและจับเวลาอย่างน้อย 2 นาที',
+        'ใช้ไหมขัดฟันหรือเครื่องฉีดน้ำทำความสะอาดซอกฟันเป็นประจำ',
+        'ลดความถี่ในการรับประทานของหวานและเครื่องดื่มที่มีน้ำตาล',
+        'พิจารณาใช้น้ำยาบ้วนปากผสมฟลูออไรด์',
+        'ควรเข้ารับการขูดหินปูนภายใน 3 เดือน'
+      ]
+    }
   },
+
   'High Risk': {
     key: 'high',
     gaugeAngle: 80,
-    recommendation: 'Significant plaque accumulation detected. Professional dental care is strongly advised.',
-    tips: [
-      'Book a dental appointment as soon as possible.',
-      'Ask your dentist about a personalised plaque control programme.',
-      'Brush after every meal and before bedtime.',
-      'Eliminate sugary drinks and reduce refined carbohydrates.',
-      'Consider using a disclosing tablet regularly to visualise remaining plaque.',
-      'Ask about prescription-strength fluoride toothpaste.',
-    ],
-  },
+    recommendation: {
+      en: 'Significant plaque accumulation detected. Professional dental care is strongly advised.',
+      th: 'พบคราบจุลินทรีย์สะสมในระดับสูง ควรเข้ารับการตรวจและดูแลโดยทันตแพทย์'
+    },
+    tips: {
+      en: [
+        'Book a dental appointment as soon as possible.',
+        'Ask your dentist about a personalised plaque control programme.',
+        'Brush after every meal and before bedtime.',
+        'Eliminate sugary drinks and reduce refined carbohydrates.',
+        'Consider using a disclosing tablet regularly to visualise remaining plaque.',
+        'Ask about prescription-strength fluoride toothpaste.'
+      ],
+      th: [
+        'นัดพบทันตแพทย์โดยเร็วที่สุด',
+        'ขอคำแนะนำเรื่องการควบคุมคราบจุลินทรีย์เฉพาะบุคคล',
+        'แปรงฟันหลังอาหารทุกมื้อและก่อนนอน',
+        'หลีกเลี่ยงเครื่องดื่มที่มีน้ำตาลและอาหารคาร์โบไฮเดรตขัดสี',
+        'ใช้เม็ดย้อมคราบจุลินทรีย์เพื่อตรวจสอบการแปรงฟัน',
+        'ปรึกษาเรื่องยาสีฟันฟลูออไรด์ความเข้มข้นสูง'
+      ]
+    }
+  }
 };
 
 // Fallback label mapping — normalises Teachable Machine class names
@@ -257,8 +384,22 @@ function showResults(predictions) {
   recIcon.closest ? null : null; // noop
 
   // Result header
-  resultLevel.textContent = top.label;
-  riskBadge.textContent   = top.label;
+  let displayLabel = top.label;
+
+  if(currentLang === "th"){
+
+    if(top.label === "Low Risk")
+      displayLabel = "ความเสี่ยงต่ำ";
+
+    if(top.label === "Medium Risk")
+      displayLabel = "ความเสี่ยงปานกลาง";
+
+    if(top.label === "High Risk")
+      displayLabel = "ความเสี่ยงสูง";
+  }
+
+  resultLevel.textContent = displayLabel;
+  riskBadge.textContent = displayLabel;
 
   // Confidence bars
   confidenceBars.innerHTML = '';
@@ -267,17 +408,25 @@ function showResults(predictions) {
     const pct   = Math.round(probability * 100);
     const isTop = label === top.label;
 
+    let translatedLabel = label;
+
+    if(currentLang === "th"){
+      if(label === "Low Risk") translatedLabel = "ความเสี่ยงต่ำ";
+      if(label === "Medium Risk") translatedLabel = "ความเสี่ยงปานกลาง";
+      if(label === "High Risk") translatedLabel = "ความเสี่ยงสูง";
+    }
+
     const item = document.createElement('div');
     item.className = 'conf-item';
     item.innerHTML = `
       <div class="conf-row">
-        <span class="conf-name">${label}</span>
+        <span class="conf-name">${translatedLabel}</span>
         <span class="conf-pct">${pct}%</span>
       </div>
       <div class="conf-track">
         <div class="conf-fill ${cfg.key}-color${isTop ? ' active-fill' : ''}"
-             style="width: 0%"
-             data-target="${pct}"></div>
+            style="width: 0%"
+            data-target="${pct}"></div>
       </div>
     `;
     confidenceBars.appendChild(item);
@@ -298,10 +447,13 @@ function showResults(predictions) {
   gaugePct.textContent = Math.round(top.probability * 100) + '%';
 
   // Recommendation
-  recText.textContent = config.recommendation;
-  recTips.innerHTML = config.tips
-    .map(t => `<li>${t}</li>`)
-    .join('');
+  recText.textContent =
+  config.recommendation[currentLang];
+
+  recTips.innerHTML =
+    config.tips[currentLang]
+      .map(t => `<li>${t}</li>`)
+      .join('');
 
   // Show section
   resultsSection.classList.remove('hidden');
@@ -322,5 +474,119 @@ restartBtn.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
+function updateLanguage() {
+
+  const t = TRANSLATIONS[currentLang];
+
+  document.getElementById("clinicalPreview").lastChild.textContent =
+    " " + t.clinicalPreview;
+
+  document.getElementById("heroLabel").textContent =
+    t.heroLabel;
+
+  document.getElementById("heroTitle1").textContent =
+    t.heroTitle1;
+
+  document.getElementById("heroTitle2").textContent =
+    t.heroTitle2;
+
+  document.getElementById("heroSub").textContent =
+    t.heroSub;
+
+  document.getElementById("step1").textContent =
+    t.step1;
+
+  document.getElementById("step2").textContent =
+    t.step2;
+
+  document.getElementById("step3").textContent =
+    t.step3;
+
+  document.getElementById("uploadTitle").textContent =
+    t.uploadTitle;
+
+  document.getElementById("uploadSubtitle").textContent =
+    t.uploadSub;
+
+  document.getElementById("dropLabel").textContent =
+    t.dropLabel;
+
+  document.getElementById("dropSub").textContent =
+    t.dropSub;
+
+  document.getElementById("chooseFileText").textContent =
+    t.chooseFile;
+
+  document.getElementById("analyzeText").textContent =
+    t.analyzeBtn;
+
+  document.getElementById("riskAssessmentTitle").textContent =
+    t.riskAssessment;
+
+  document.getElementById("confidenceTitle").textContent =
+    t.confidence;
+
+  document.getElementById("recommendationTitle").textContent =
+    t.recommendation;
+
+  document.getElementById("restartText").textContent =
+    t.another;
+
+  document.getElementById("disclaimerText").textContent =
+    t.disclaimer;
+
+  document.getElementById("langBtn").textContent =
+    currentLang === "en" ? "ไทย" : "EN";
+
+  document.getElementById("gaugeLow").textContent =
+    t.lowLabel;
+
+  document.getElementById("gaugeMedium").textContent =
+    t.mediumLabel;
+
+  document.getElementById("gaugeHigh").textContent =
+    t.highLabel;
+
+      // อัปเดตผลลัพธ์ที่แสดงอยู่เมื่อเปลี่ยนภาษา
+  if (!resultsSection.classList.contains('hidden')) {
+
+    const riskLabel = resultLevel.textContent;
+
+    let key = 'Medium Risk';
+
+    if (
+      riskLabel.includes('Low') ||
+      riskLabel.includes('ต่ำ')
+    ) key = 'Low Risk';
+
+    if (
+      riskLabel.includes('High') ||
+      riskLabel.includes('สูง')
+    ) key = 'High Risk';
+
+    const config = RISK_CONFIG[key];
+
+    recText.textContent =
+      config.recommendation[currentLang];
+
+    recTips.innerHTML =
+      config.tips[currentLang]
+        .map(t => `<li>${t}</li>`)
+        .join('');
+  }
+}
+
+document.getElementById("langBtn").addEventListener("click", () => {
+
+  currentLang =
+    currentLang === "en"
+      ? "th"
+      : "en";
+
+  updateLanguage();
+
+});
+
 // ── Init ───────────────────────────────────────
+updateLanguage();
 loadModel();

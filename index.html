@@ -31,10 +31,15 @@
         </div>
         <span class="logo-text">Oral Biofilm <em>AI</em></span>
       </div>
-      <nav class="header-badge">
-        <span class="pulse-dot" aria-hidden="true"></span>
-        Clinical Preview
-      </nav>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <button id="langBtn" class="lang-btn">
+          ไทย
+        </button>
+        <nav class="header-badge" id="clinicalPreview">
+          <span class="pulse-dot" aria-hidden="true"></span>
+          Clinical Preview
+        </nav>
+      </div>
     </div>
   </header>
 
@@ -42,20 +47,18 @@
 
     <!-- Hero -->
     <section class="hero">
-      <div class="hero-label">AI-Powered Dental Analysis</div>
+      <div class="hero-label" id="heroLabel">AI-Powered Dental Analysis</div>
       <h1 class="hero-title">
-        Detect plaque risk<br/>
-        <em>before it becomes a problem.</em>
+        <span id="heroTitle1">Detect plaque risk</span><br>
+        <em id="heroTitle2">before it becomes a problem.</em>
       </h1>
-      <p class="hero-sub">
+      <p class="hero-sub" id="heroSub">
         Upload a photo taken after applying disclosing gel. Our AI model instantly assesses your caries and biofilm risk level.
       </p>
       <div class="hero-steps">
-        <div class="step"><span>01</span> Upload photo</div>
-        <div class="step-div" aria-hidden="true"></div>
-        <div class="step"><span>02</span> AI analyzes</div>
-        <div class="step-div" aria-hidden="true"></div>
-        <div class="step"><span>03</span> Get results</div>
+        <div class="step"><span>01</span> <span id="step1">Upload photo</span></div>
+        <div class="step"><span>02</span> <span id="step2">AI analyzes</span></div>
+        <div class="step"><span>03</span> <span id="step3">Get results</span></div>
       </div>
     </section>
 
@@ -70,8 +73,12 @@
           </svg>
         </div>
         <div>
-          <h2 class="card-title">Upload Image</h2>
-          <p class="card-subtitle">Drag & drop or tap to select</p>
+          <h2 class="card-title" id="uploadTitle">
+            Upload Image
+          </h2>
+          <p class="card-subtitle" id="uploadSubtitle">
+            Drag & drop or tap to select
+          </p>
         </div>
       </div>
 
@@ -84,14 +91,14 @@
               <path d="M8 42l14-10 8 8 8-12 18 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
-          <p class="drop-label">Drop your dental photo here</p>
-          <p class="drop-sub">PNG, JPG or WEBP · max 10MB</p>
+          <p class="drop-label" id="dropLabel">Drop your dental photo here</p>
+          <p class="drop-sub" id="dropSub">PNG, JPG or WEBP · max 10MB</p>
           <label class="upload-btn" for="fileInput">
             <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M10 3v10M5 8l5-5 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               <path d="M3 17h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
             </svg>
-            Choose File
+            <span id="chooseFileText">Choose File</span>
           </label>
           <input type="file" id="fileInput" accept="image/*" capture="environment" hidden aria-hidden="true" />
         </div>
@@ -109,7 +116,9 @@
       </div>
 
       <button class="analyze-btn" id="analyzeBtn" disabled>
-        <span class="btn-text">Analyze Image</span>
+        <span class="btn-text" id="analyzeText">
+          Analyze Image
+        </span>
         <span class="btn-spinner hidden" id="btnSpinner" aria-hidden="true"></span>
         <svg class="btn-arrow" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -136,7 +145,9 @@
             </svg>
           </div>
           <div>
-            <p class="result-label">Risk Assessment</p>
+            <p class="result-label" id="riskAssessmentTitle">
+              Risk Assessment
+            </p>
             <h2 class="result-level" id="resultLevel">—</h2>
           </div>
           <div class="risk-badge" id="riskBadge">—</div>
@@ -144,7 +155,9 @@
 
         <!-- Confidence bars -->
         <div class="confidence-section">
-          <h3 class="section-title">Prediction Confidence</h3>
+          <h3 class="section-title" id="confidenceTitle">
+            Prediction Confidence
+          </h3>
           <div class="confidence-bars" id="confidenceBars">
             <!-- Injected by JS -->
           </div>
@@ -164,11 +177,11 @@
             <path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="url(#gaugeGrad)" stroke-width="14" stroke-linecap="round"/>
             <line id="gaugeNeedle" x1="100" y1="100" x2="100" y2="30" stroke="#1e293b" stroke-width="3" stroke-linecap="round" transform="rotate(0 100 100)"/>
             <circle cx="100" cy="100" r="6" fill="#1e293b"/>
-            <text x="20" y="115" fill="#64748b" font-size="10" font-family="DM Sans">Low</text>
-            <text x="84" y="18" fill="#64748b" font-size="10" font-family="DM Sans">Medium</text>
-            <text x="158" y="115" fill="#64748b" font-size="10" font-family="DM Sans">High</text>
+            <text id="gaugeLow" x="20" y="115">Low</text>
+            <text id="gaugeMedium" x="84" y="18">Medium</text>
+            <text id="gaugeHigh" x="158" y="115">High</text>
           </svg>
-          <div class="gauge-pct" id="gaugePct">—</div>
+            <div class="gauge-pct" id="gaugePct">—</div>
         </div>
       </div>
 
@@ -181,7 +194,9 @@
           </svg>
         </div>
         <div class="rec-body">
-          <h3 class="rec-title">Clinical Recommendation</h3>
+          <h3 class="rec-title" id="recommendationTitle">
+            Clinical Recommendation
+          </h3>
           <p class="rec-text" id="recText">—</p>
           <ul class="rec-tips" id="recTips">
             <!-- injected by JS -->
@@ -196,7 +211,7 @@
           <path d="M10 7v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
           <path d="M3.5 5L3 3l-2 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        Analyze Another Image
+        <span id="restartText">Analyze Another Image</span>
       </button>
 
     </section>
@@ -207,7 +222,7 @@
         <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
         <path d="M10 9v5M10 7v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
       </svg>
-      <p>This tool is for educational screening purposes only and does not replace professional dental diagnosis. Always consult a licensed dentist for clinical decisions.</p>
+      <p id="disclaimerText">This tool is for educational screening purposes only and does not replace professional dental diagnosis. Always consult a licensed dentist for clinical decisions.</p>
     </footer>
 
   </main>

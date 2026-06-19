@@ -782,3 +782,18 @@ body {
   .hero-steps { gap: 6px; }
   .step-div { width: 14px; }
 }
+
+.lang-btn{
+  padding:8px 14px;
+  border:none;
+  border-radius:999px;
+  background:#2563eb;
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.lang-btn:hover{
+  opacity:.9;
+}
