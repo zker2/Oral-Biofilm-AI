@@ -247,17 +247,24 @@ function handleFile(file) {
   }
 
   uploadedFile = file;
-  const url = URL.createObjectURL(file);
-  previewImg.src = url;
 
-  dropContent.classList.add('hidden');
-  previewWrap.classList.remove('hidden');
-  analyzeBtn.disabled = !(model || true); // enable once image is loaded (model may be in demo mode)
-
-  // Enable once image actually loaded
-  previewImg.onload = () => {
+  // Use FileReader instead of createObjectURL — more reliable on iOS/Android camera
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    previewImg.src = e.target.result;
+    dropContent.classList.add('hidden');
+    previewWrap.classList.remove('hidden');
     analyzeBtn.disabled = false;
   };
+  reader.onerror = () => {
+    // Fallback to object URL
+    const url = URL.createObjectURL(file);
+    previewImg.src = url;
+    dropContent.classList.add('hidden');
+    previewWrap.classList.remove('hidden');
+    analyzeBtn.disabled = false;
+  };
+  reader.readAsDataURL(file);
 }
 
 // Drag and drop
@@ -291,8 +298,20 @@ dropZone.addEventListener('keydown', (e) => {
   }
 });
 
-fileInput.addEventListener('change', () => {
-  if (fileInput.files[0]) handleFile(fileInput.files[0]);
+fileInput.addEventListener('change', (e) => {
+  // Capture file immediately before anything can reset it
+  const file = e.target.files && e.target.files[0]
+    ? e.target.files[0]
+    : (fileInput.files && fileInput.files[0] ? fileInput.files[0] : null);
+  if (file) handleFile(file);
+});
+
+// iOS Safari sometimes fires 'input' instead of 'change' for camera capture
+fileInput.addEventListener('input', (e) => {
+  const file = e.target.files && e.target.files[0]
+    ? e.target.files[0]
+    : (fileInput.files && fileInput.files[0] ? fileInput.files[0] : null);
+  if (file && file !== uploadedFile) handleFile(file);
 });
 
 // Remove image
