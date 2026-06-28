@@ -1,36 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-mode="kid">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OralScan AI — Dental Caries Risk Analysis</title>
+  <title>Tooth Check! / OralScan AI — Plaque Screening for the Whole Family</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
+  <!-- Decorative sky (kid mode only) -->
+  <div class="sky kid-only" aria-hidden="true">
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="cloud cloud-3"></div>
+  </div>
+
   <!-- Header -->
   <header class="header">
     <div class="header-inner">
-      <a class="logo" href="#" aria-label="OralScan AI home">
-        <svg class="logo-mark" viewBox="0 0 36 36" fill="none" aria-hidden="true">
-          <path d="M18 4C11.4 4 7 9.6 7 15c0 3.2 1 5.8 2.6 8L18 32l8.4-9c1.6-2.2 2.6-4.8 2.6-8C29 9.6 24.6 4 18 4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-          <path d="M14 17c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-          <circle cx="18" cy="17" r="1.5" fill="currentColor"/>
+      <div class="logo-wrap">
+        <svg class="logo-tooth" viewBox="0 0 40 48" fill="none" aria-hidden="true">
+          <path d="M20 3C13 3 7 8 7 15c0 4 1.5 7 3.5 10L14 40c.5 2 1.5 5 6 5s5.5-3 6-5l3.5-15C31.5 22 33 19 33 15c0-7-6-12-13-12z" fill="#fff" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+          <circle cx="15" cy="17" r="2" fill="currentColor"/>
+          <circle cx="25" cy="17" r="2" fill="currentColor"/>
         </svg>
-        <span class="logo-name">OralScan</span>
-        <span class="logo-ai">AI</span>
-      </a>
+        <span class="logo-text">
+          <span class="kid-only">Tooth Check!</span>
+          <span class="pro-only">OralScan<span class="logo-ai">AI</span></span>
+        </span>
+      </div>
 
       <nav class="header-right">
-        <button id="historyToggleBtn" class="icon-btn" aria-label="View analysis history" title="History">
+        <button id="historyToggleBtn" class="icon-btn pro-only" aria-label="View analysis history" title="History">
           <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 4v6l3.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="10" r="7.5" stroke="currentColor" stroke-width="1.5"/></svg>
           <span class="badge" id="historyCount" aria-live="polite"></span>
         </button>
-        <button id="langBtn" class="lang-btn" aria-label="Switch language">EN / ไทย</button>
-        <div class="status-pill" id="statusChip">
+        <button id="modeBtn" class="mode-btn" aria-label="Switch mode"></button>
+        <button id="langBtn" class="lang-btn">EN / ไทย</button>
+        <div class="status-pill pro-only" id="statusChip">
           <span class="status-dot" id="chipDot"></span>
           <span id="chipLabel">Loading…</span>
         </div>
@@ -38,7 +48,7 @@
     </div>
   </header>
 
-  <!-- History Drawer -->
+  <!-- History Drawer (Pro) -->
   <aside class="drawer" id="historyPanel" aria-label="Analysis history" role="complementary">
     <div class="drawer-header">
       <h2 id="historyTitle">History</h2>
@@ -63,79 +73,108 @@
 
     <!-- Hero -->
     <section class="hero">
-      <p class="eyebrow" id="heroEyebrow">Disclosing-gel image analysis</p>
-      <h1 class="hero-title">
-        <span id="heroLine1">Know your</span>
-        <em id="heroLine2">caries risk</em>
-        <span id="heroLine3">in seconds.</span>
-      </h1>
-      <p class="hero-desc" id="heroDesc">Upload a photo taken after applying disclosing gel. The AI reads your biofilm distribution and returns a calibrated risk score with clinical guidance.</p>
+      <!-- Toby — kid mode character -->
+      <div class="toby-wrap kid-only" id="tobyWrap" aria-label="Toby the tooth" aria-live="polite">
+        <svg id="tobyNeutral" class="toby" viewBox="0 0 120 140" fill="none">
+          <path d="M60 8C38 8 20 24 20 44c0 12 5 22 12 30L38 108c2 7 5 24 22 24s20-17 22-24l6-34c7-8 12-18 12-30C100 24 82 8 60 8z" fill="#fff" stroke="#e0d0f0" stroke-width="3"/>
+          <ellipse cx="44" cy="30" rx="7" ry="10" fill="#f0f8ff" opacity=".6"/>
+          <circle cx="46" cy="50" r="5" fill="#5b4fcf"/>
+          <circle cx="74" cy="50" r="5" fill="#5b4fcf"/>
+          <circle cx="48" cy="48" r="2" fill="#fff"/>
+          <circle cx="76" cy="48" r="2" fill="#fff"/>
+          <path d="M48 68h24" stroke="#c0aee8" stroke-width="3" stroke-linecap="round"/>
+          <ellipse cx="38" cy="65" rx="8" ry="5" fill="#ffb3c6" opacity=".5"/>
+          <ellipse cx="82" cy="65" rx="8" ry="5" fill="#ffb3c6" opacity=".5"/>
+        </svg>
+        <svg id="tobyHappy" class="toby hidden" viewBox="0 0 120 140" fill="none">
+          <path d="M60 8C38 8 20 24 20 44c0 12 5 22 12 30L38 108c2 7 5 24 22 24s20-17 22-24l6-34c7-8 12-18 12-30C100 24 82 8 60 8z" fill="#fff" stroke="#06D6A0" stroke-width="3"/>
+          <ellipse cx="44" cy="30" rx="7" ry="10" fill="#f0fff8" opacity=".6"/>
+          <path d="M41 48 q5-6 10 0" stroke="#5b4fcf" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M69 48 q5-6 10 0" stroke="#5b4fcf" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M44 66 q16 16 32 0" stroke="#06D6A0" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+          <ellipse cx="36" cy="66" rx="9" ry="6" fill="#ffb3c6" opacity=".7"/>
+          <ellipse cx="84" cy="66" rx="9" ry="6" fill="#ffb3c6" opacity=".7"/>
+          <text x="10" y="35" font-size="14" opacity=".9">⭐</text>
+          <text x="92" y="32" font-size="14" opacity=".9">⭐</text>
+        </svg>
+        <svg id="tobyMedium" class="toby hidden" viewBox="0 0 120 140" fill="none">
+          <path d="M60 8C38 8 20 24 20 44c0 12 5 22 12 30L38 108c2 7 5 24 22 24s20-17 22-24l6-34c7-8 12-18 12-30C100 24 82 8 60 8z" fill="#fff" stroke="#FFB347" stroke-width="3"/>
+          <ellipse cx="44" cy="30" rx="7" ry="10" fill="#fffbf0" opacity=".6"/>
+          <circle cx="46" cy="51" r="5" fill="#5b4fcf"/>
+          <circle cx="74" cy="51" r="5" fill="#5b4fcf"/>
+          <circle cx="48" cy="49" r="2" fill="#fff"/>
+          <circle cx="76" cy="49" r="2" fill="#fff"/>
+          <path d="M46 69 q14 5 28 0" stroke="#FFB347" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <ellipse cx="38" cy="65" rx="8" ry="5" fill="#ffb3c6" opacity=".4"/>
+          <ellipse cx="82" cy="65" rx="8" ry="5" fill="#ffb3c6" opacity=".4"/>
+        </svg>
+        <svg id="tobySad" class="toby hidden" viewBox="0 0 120 140" fill="none">
+          <path d="M60 8C38 8 20 24 20 44c0 12 5 22 12 30L38 108c2 7 5 24 22 24s20-17 22-24l6-34c7-8 12-18 12-30C100 24 82 8 60 8z" fill="#fff" stroke="#FF9B9B" stroke-width="3"/>
+          <ellipse cx="44" cy="30" rx="7" ry="10" fill="#fff5f5" opacity=".6"/>
+          <circle cx="46" cy="52" r="5" fill="#5b4fcf"/>
+          <circle cx="74" cy="52" r="5" fill="#5b4fcf"/>
+          <circle cx="48" cy="50" r="2" fill="#fff"/>
+          <circle cx="76" cy="50" r="2" fill="#fff"/>
+          <path d="M46 72 q14-8 28 0" stroke="#FF9B9B" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <ellipse cx="38" cy="66" rx="8" ry="5" fill="#ffb3c6" opacity=".3"/>
+          <ellipse cx="82" cy="66" rx="8" ry="5" fill="#ffb3c6" opacity=".3"/>
+        </svg>
+      </div>
 
-      <ol class="steps" aria-label="How it works">
-        <li class="step">
-          <span class="step-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M12 2C7.6 2 5 5.8 5 9c0 2.2.8 4 2 5.5L12 21l5-6.5C18.2 13 19 11.2 19 9c0-3.2-2.6-7-7-7z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          </span>
-          <span id="wfStep1">Apply gel &amp; photograph</span>
-        </li>
+      <p class="eyebrow pro-only" id="heroEyebrow">Disclosing-gel image analysis</p>
+
+      <h1 class="hero-title" id="heroTitle">—</h1>
+      <p class="hero-subtitle" id="heroSubtitle">—</p>
+
+      <ol class="steps pro-only" aria-label="How it works">
+        <li class="step"><span class="step-icon" aria-hidden="true">🦷</span><span id="wfStep1"></span></li>
         <li class="step-arrow" aria-hidden="true">→</li>
-        <li class="step">
-          <span class="step-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </span>
-          <span id="wfStep2">Upload image</span>
-        </li>
+        <li class="step"><span class="step-icon" aria-hidden="true">📤</span><span id="wfStep2"></span></li>
         <li class="step-arrow" aria-hidden="true">→</li>
-        <li class="step">
-          <span class="step-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </span>
-          <span id="wfStep3">Read your report</span>
-        </li>
+        <li class="step"><span class="step-icon" aria-hidden="true">✅</span><span id="wfStep3"></span></li>
       </ol>
     </section>
 
     <!-- Upload / Camera card -->
-    <section class="card upload-card" id="uploadSection">
+    <section class="card upload-card">
       <div class="tab-bar" role="tablist">
-        <button class="tab active" id="tabUpload" role="tab" aria-selected="true" aria-controls="paneUpload">
-          <svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><rect x="1.5" y="1.5" width="15" height="15" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M4 12l3-3 2.5 2.5 3.5-5L17 12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span id="tabUploadText">Upload Photo</span>
+        <button class="tab active" id="tabUpload" role="tab" aria-selected="true">
+          <span class="kid-only" aria-hidden="true">🖼️</span>
+          <svg class="pro-only" viewBox="0 0 18 18" fill="none" aria-hidden="true"><rect x="1.5" y="1.5" width="15" height="15" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M4 12l3-3 2.5 2.5 3.5-5L17 12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span id="tabUploadText">Use a photo</span>
         </button>
-        <button class="tab" id="tabCamera" role="tab" aria-selected="false" aria-controls="paneCamera">
-          <svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="10" r="2.5" stroke="currentColor" stroke-width="1.4"/><path d="M6.5 3.5h5l1.5 2H15a1 1 0 011 1v7a1 1 0 01-1 1H3a1 1 0 01-1-1v-7a1 1 0 011-1h1.5l1.5-2z" stroke="currentColor" stroke-width="1.4"/></svg>
-          <span id="tabCameraText">Take Photo</span>
+        <button class="tab" id="tabCamera" role="tab" aria-selected="false">
+          <span class="kid-only" aria-hidden="true">📷</span>
+          <svg class="pro-only" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="10" r="2.5" stroke="currentColor" stroke-width="1.4"/><path d="M6.5 3.5h5l1.5 2H15a1 1 0 011 1v7a1 1 0 01-1 1H3a1 1 0 01-1-1v-7a1 1 0 011-1h1.5l1.5-2z" stroke="currentColor" stroke-width="1.4"/></svg>
+          <span id="tabCameraText">Take a photo</span>
         </button>
       </div>
 
       <!-- Upload pane -->
       <div id="paneUpload" role="tabpanel">
-        <div class="aperture-zone" id="dropZone" role="button" tabindex="0" aria-label="Upload dental image">
-          <!-- Scanning sweep overlay (shown during analysis) -->
-          <div class="scan-sweep" id="scanSweep" aria-hidden="true"></div>
+        <div class="upload-zone" id="dropZone" role="button" tabindex="0" aria-label="Upload dental image">
+          <div class="scan-sweep pro-only" id="scanSweep" aria-hidden="true"></div>
 
-          <div class="aperture-idle" id="dropContent">
-            <div class="aperture-icon" aria-hidden="true">
-              <svg viewBox="0 0 64 64" fill="none">
+          <div class="upload-idle" id="dropContent">
+            <div class="upload-icon" aria-hidden="true">
+              <span class="kid-only">🦷✨</span>
+              <svg class="pro-only" viewBox="0 0 64 64" fill="none">
                 <ellipse cx="32" cy="32" rx="26" ry="20" stroke="currentColor" stroke-width="1.6" stroke-dasharray="4 3"/>
                 <path d="M32 24v16M24 32h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
               </svg>
             </div>
-            <p class="aperture-hint" id="dzHint">Drop your post-gel dental photo here</p>
-            <p class="aperture-meta" id="dzMeta">PNG · JPG · WEBP · max 10 MB</p>
+            <p class="upload-hint" id="dzHint">Drop your tooth photo here</p>
+            <p class="upload-meta pro-only" id="dzMeta">PNG · JPG · WEBP · max 10 MB</p>
             <button type="button" class="choose-btn" id="chooseFileBtn">
-              <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2v9M4.5 5.5L8 2l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-              <span id="chooseFileText">Choose file</span>
+              <span id="chooseFileText">Choose a photo</span>
             </button>
             <input type="file" id="fileInput" accept="image/*" hidden />
           </div>
 
-          <div class="aperture-preview hidden" id="previewWrap">
-            <img id="previewImg" src="" alt="Uploaded dental image" class="preview-img" crossorigin="anonymous" />
-            <button class="remove-btn" id="removeBtn" aria-label="Remove image">
-              <svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 2l8 8M10 2L2 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            </button>
-            <div class="preview-filename" id="previewFilename"></div>
+          <div class="upload-preview hidden" id="previewWrap">
+            <img id="previewImg" src="" alt="Your tooth photo" class="preview-img" crossorigin="anonymous" />
+            <button class="remove-btn" id="removeBtn" aria-label="Remove image">✕</button>
+            <div class="preview-filename pro-only" id="previewFilename"></div>
           </div>
         </div>
       </div>
@@ -143,115 +182,104 @@
       <!-- Camera pane -->
       <div id="paneCamera" role="tabpanel" class="hidden">
         <div class="camera-wrap" id="cameraWrap">
-          <video id="cameraFeed" autoplay playsinline muted class="camera-feed"></video>
+          <video id="cameraFeed" autoplay playsinline muted class="camera-feed hidden"></video>
           <canvas id="captureCanvas" class="hidden"></canvas>
-          <div class="camera-overlay" aria-hidden="true">
-            <div class="camera-guide"></div>
-          </div>
+          <div class="camera-overlay" aria-hidden="true"><div class="camera-guide"></div></div>
           <div class="camera-controls">
-            <button class="cam-btn" id="startCameraBtn">
-              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="4" fill="currentColor"/><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/></svg>
-              <span id="startCameraText">Start Camera</span>
-            </button>
-            <button class="cam-btn cam-capture hidden" id="captureBtn">
-              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="6" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="3" fill="currentColor"/></svg>
-              <span id="captureText">Capture</span>
-            </button>
-            <button class="cam-btn cam-retake hidden" id="retakeBtn">
-              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 10a7 7 0 1014 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M3 6v4h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <span id="retakeText">Retake</span>
-            </button>
+            <button class="cam-btn" id="startCameraBtn"><span id="startCameraText">Start camera</span></button>
+            <button class="cam-btn cam-capture hidden" id="captureBtn"><span id="captureText">Snap!</span></button>
+            <button class="cam-btn cam-retake hidden" id="retakeBtn"><span id="retakeText">Retake</span></button>
           </div>
           <div class="camera-captured hidden" id="cameraCaptured">
-            <img id="capturedImg" src="" alt="Captured dental photo" class="preview-img" />
-            <button class="remove-btn" id="removeCaptureBtn" aria-label="Remove">
-              <svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 2l8 8M10 2L2 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            </button>
+            <img id="capturedImg" src="" alt="Captured tooth photo" class="preview-img" />
+            <button class="remove-btn" id="removeCaptureBtn" aria-label="Remove">✕</button>
           </div>
         </div>
       </div>
 
       <button class="analyze-btn" id="analyzeBtn" disabled>
-        <span id="analyzeText">Analyze Image</span>
+        <span id="analyzeText">Check my teeth! 🔍</span>
         <span class="btn-spinner hidden" id="btnSpinner" aria-hidden="true"></span>
-        <svg class="btn-arrow" id="btnArrow" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-          <path d="M3 9h12M10 4l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
       </button>
     </section>
 
     <!-- Results -->
     <section class="results hidden" id="resultsSection" aria-live="polite">
 
-      <!-- Score card -->
-      <div class="card score-card" id="scorePanel">
-        <div class="score-layout">
-          <div class="score-left">
-            <p class="score-eyebrow" id="riskLabel">Risk Assessment</p>
-            <h2 class="score-level" id="resultLevel">—</h2>
-            <div class="risk-tag" id="riskPill">—</div>
-          </div>
-          <div class="score-right">
-            <div class="ring-wrap" id="scoreRing">
-              <svg class="ring-svg" viewBox="0 0 80 80">
-                <circle class="ring-track" cx="40" cy="40" r="32"/>
-                <circle class="ring-fill" id="ringFill" cx="40" cy="40" r="32" stroke-dasharray="201" stroke-dashoffset="201" transform="rotate(-90 40 40)"/>
-              </svg>
-              <span class="ring-pct" id="ringPct">0%</span>
+      <!-- KID result -->
+      <div class="kid-only">
+        <div class="result-card" id="kidResultCard">
+          <div class="result-stars" id="resultStars" aria-label="Star rating"></div>
+          <h2 class="result-headline" id="resultHeadline">—</h2>
+          <p class="result-message" id="resultMessage">—</p>
+        </div>
+        <div class="tips-card">
+          <h3 class="tips-heading" id="tipsHeadingKid">Here's what to do 👇</h3>
+          <ul class="tips-list" id="tipsListKid"></ul>
+        </div>
+      </div>
+
+      <!-- PRO result -->
+      <div class="pro-only">
+        <div class="card score-card" id="scorePanel">
+          <div class="score-layout">
+            <div class="score-left">
+              <p class="score-eyebrow" id="riskLabel">Risk Assessment</p>
+              <h2 class="score-level" id="resultLevel">—</h2>
+              <div class="risk-tag" id="riskPill">—</div>
             </div>
-            <div class="score-timestamp" id="scoreTimestamp"></div>
+            <div class="score-right">
+              <div class="ring-wrap">
+                <svg class="ring-svg" viewBox="0 0 80 80">
+                  <circle class="ring-track" cx="40" cy="40" r="32"/>
+                  <circle class="ring-fill" id="ringFill" cx="40" cy="40" r="32" stroke-dasharray="201" stroke-dashoffset="201" transform="rotate(-90 40 40)"/>
+                </svg>
+                <span class="ring-pct" id="ringPct">0%</span>
+              </div>
+              <div class="score-timestamp" id="scoreTimestamp"></div>
+            </div>
+          </div>
+
+          <div class="conf-block">
+            <h3 class="section-label" id="confidenceTitle">Confidence Breakdown</h3>
+            <div class="conf-bars" id="confidenceBars"></div>
+          </div>
+
+          <div class="gauge-strip">
+            <div class="gauge-track"><div class="gauge-needle" id="gsNeedle"></div></div>
+            <div class="gauge-labels">
+              <span id="gsLow">Low</span><span id="gsMed">Medium</span><span id="gsHigh">High</span>
+            </div>
           </div>
         </div>
 
-        <!-- Confidence bars -->
-        <div class="conf-block">
-          <h3 class="section-label" id="confidenceTitle">Confidence Breakdown</h3>
-          <div class="conf-bars" id="confidenceBars"></div>
+        <div class="card rec-card" id="recPanel">
+          <div class="rec-header">
+            <div class="rec-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <h3 class="section-label" id="recTitle">Clinical Recommendation</h3>
+              <p class="rec-summary" id="recText">—</p>
+            </div>
+          </div>
+          <ul class="tips" id="recTips"></ul>
         </div>
 
-        <!-- Gauge strip -->
-        <div class="gauge-strip">
-          <div class="gauge-track">
-            <div class="gauge-needle" id="gsNeedle"></div>
-          </div>
-          <div class="gauge-labels">
-            <span id="gsLow">Low</span>
-            <span id="gsMed">Medium</span>
-            <span id="gsHigh">High</span>
-          </div>
+        <div class="card trend-card hidden" id="trendPanel">
+          <h3 class="section-label" id="trendTitle">Your Risk Trend</h3>
+          <div class="trend-chart" id="trendChart" role="img" aria-label="Risk trend chart"></div>
+          <p class="trend-note" id="trendNote"></p>
         </div>
       </div>
 
-      <!-- Recommendation -->
-      <div class="card rec-card" id="recPanel">
-        <div class="rec-header">
-          <div class="rec-icon" id="recIconWrap" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <div>
-            <h3 class="section-label" id="recTitle">Clinical Recommendation</h3>
-            <p class="rec-summary" id="recText">—</p>
-          </div>
-        </div>
-        <ul class="tips" id="recTips"></ul>
-      </div>
-
-      <!-- Trend panel -->
-      <div class="card trend-card hidden" id="trendPanel">
-        <h3 class="section-label" id="trendTitle">Your Risk Trend</h3>
-        <div class="trend-chart" id="trendChart" role="img" aria-label="Risk trend chart"></div>
-        <p class="trend-note" id="trendNote"></p>
-      </div>
-
-      <!-- Actions -->
+      <!-- Shared actions -->
       <div class="result-actions">
         <button class="action-btn primary" id="restartBtn">
-          <svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M3 9a6 6 0 1012 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M3 5v4h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span id="restartText">Analyze Another</span>
+          <span id="restartText">Check again!</span>
         </button>
         <button class="action-btn" id="shareBtn">
-          <svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="14" cy="4" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="14" cy="14" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="4" cy="9" r="2" stroke="currentColor" stroke-width="1.4"/><path d="M6 8l6-3M6 10l6 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-          <span id="shareText">Copy Summary</span>
+          <span id="shareText">Show a grown-up</span>
         </button>
       </div>
 
@@ -259,13 +287,12 @@
 
     <!-- Disclaimer -->
     <footer class="disclaimer">
-      <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.2"/><path d="M8 7v5M8 5v.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-      <p id="disclaimerText">For educational screening only. Not a substitute for professional dental diagnosis. Always consult a licensed dentist for clinical decisions.</p>
+      <span aria-hidden="true">👩‍⚕️</span>
+      <p id="disclaimerText"><strong id="disclaimerStrong">For parents &amp; dentists:</strong> <span id="disclaimerBody">This tool screens plaque levels from disclosing-gel photos using an AI model. It is not a clinical diagnosis. Always consult a dentist for professional advice.</span></p>
     </footer>
 
   </main>
 
-  <!-- Toast -->
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js"></script>
